@@ -9,6 +9,10 @@ interface OnboardingFlowProps {
   onComplete: (gymscore: number, aiMessage?: string) => void;
 }
 
+interface UpsertPayload {
+  [key: string]: string | number | undefined;
+}
+
 export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
   const [unit, setUnit] = useState<'kg' | 'lbs'>('kg');
   const [formData, setFormData] = useState({
@@ -201,7 +205,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('exercise', ex.exercise)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (exercises):', fetchError);
-        const upsertPayload: unknown = {
+        const upsertPayload: UpsertPayload = {
           exercise: ex.exercise,
           weight: ex.weight,
           unit: ex.unit,
@@ -242,7 +246,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('muscle_group', ph.muscle_group)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (phisique):', fetchError);
-        const upsertPayload: unknown = {
+        const upsertPayload: UpsertPayload = {
           muscle_group: ph.muscle_group,
           grade: ph.grade,
           points: ph.points,
@@ -265,7 +269,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('user_id', userId)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (score):', fetchError);
-        const upsertPayload: unknown = {
+        const upsertPayload: UpsertPayload = {
           score: gymscore,
           last_update: now,
           user_id: userId,
@@ -286,7 +290,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('user_id', userId)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (frequency):', fetchError);
-        const upsertPayload: unknown = {
+        const upsertPayload: UpsertPayload = {
           days_per_week: freq,
           points: freq * 15,
           last_update: now,

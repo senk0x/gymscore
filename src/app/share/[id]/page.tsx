@@ -1,14 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
 import ShareClientPage from './ShareClientPage';
 import { supabase } from '@/lib/supabaseClient';
 
-interface PageProps {
-  params: Record<string, string | string[] | undefined>;
-}
-
-export default async function Page({ params }: PageProps) {
-  const userId = Array.isArray(params.id) ? params.id[0] : params.id || '';
+export default async function Page({ params }: { params: Promise<{ id: string | string[] | undefined }> }) {
+  const resolvedParams = await params;
+  const userId = Array.isArray(resolvedParams.id) ? resolvedParams.id[0] : resolvedParams.id || '';
   // Fetch the latest gymscore for this user
   const { data: scoreRows } = await supabase
     .from('score')

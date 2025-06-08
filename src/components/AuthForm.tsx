@@ -4,12 +4,13 @@ import { SignInButton } from '@/components/ui/sign-in-button';
 
 interface AuthFormProps {
   open: boolean;
+  onClose: () => void;
   onAuth: (email: string, password: string, name: string, mode: 'login' | 'register') => void;
   mode: 'login' | 'register';
   onModeChange: (mode: 'login' | 'register') => void;
 }
 
-export function AuthForm({ open, onAuth, mode, onModeChange }: AuthFormProps) {
+export function AuthForm({ open, onClose, onAuth, mode, onModeChange }: AuthFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -42,8 +43,10 @@ export function AuthForm({ open, onAuth, mode, onModeChange }: AuthFormProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        onClick={onClose}
       >
         <motion.form
+          onClick={e => e.stopPropagation()}
           onSubmit={handleSubmit}
           className="w-full max-w-[320px] bg-[#27272A] rounded-[20px] px-[13px] pt-[21px] pb-[21px] mx-auto my-0 flex flex-col justify-center"
           initial={{ scale: 0.95, opacity: 0 }}

@@ -10,6 +10,20 @@ import { useAuth } from '@/context/AuthContext';
 import { ProfileIcon } from '@/components/ui/ProfileIcon';
 import { SquarePen } from 'lucide-react';
 
+interface Frequency {
+  points: number;
+  days_per_week: number;
+  [key: string]: unknown;
+}
+
+interface SegmentData {
+  points?: number;
+  weight?: number;
+  unit?: string;
+  grade?: string;
+  [key: string]: unknown;
+}
+
 function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
   // Ring settings
   const segments = 5;
@@ -48,7 +62,7 @@ function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
   );
 }
 
-function FrequencyBanner({ frequency, onEdit }: { frequency: unknown, onEdit: () => void }) {
+function FrequencyBanner({ frequency, onEdit }: { frequency: Frequency | null, onEdit: () => void }) {
   const left = -275;
   const top = 200 - 60;
   const totalPoints = frequency ? frequency.points : 0;
@@ -77,7 +91,7 @@ function FrequencyBanner({ frequency, onEdit }: { frequency: unknown, onEdit: ()
   );
 }
 
-function LegsBanner({ squats, legsPhisique, onEdit }: { squats: unknown, legsPhisique: unknown, onEdit: () => void }) {
+function LegsBanner({ squats, legsPhisique, onEdit }: { squats: SegmentData | null, legsPhisique: SegmentData | null, onEdit: () => void }) {
   // Blue segment banner: bottom right of the circle
   const left = 400 - 40;
   const top = 400 - 80;
@@ -130,7 +144,7 @@ function LegsBanner({ squats, legsPhisique, onEdit }: { squats: unknown, legsPhi
   );
 }
 
-function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: unknown, armsPhisique: unknown, onEdit: () => void }) {
+function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: SegmentData | null, armsPhisique: SegmentData | null, onEdit: () => void }) {
   const left = 400 - 40;
   const top = -60;
   const totalPoints = (curls?.points || 0) + (armsPhisique?.points || 0);
@@ -160,7 +174,7 @@ function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: unknown, armsPhisi
   );
 }
 
-function ChestBanner({ bench, chestPhisique, onEdit }: { bench: unknown, chestPhisique: unknown, onEdit: () => void }) {
+function ChestBanner({ bench, chestPhisique, onEdit }: { bench: SegmentData | null, chestPhisique: SegmentData | null, onEdit: () => void }) {
   const left = -175;
   const top = 400 - 40;
   const totalPoints = (bench?.points || 0) + (chestPhisique?.points || 0);
@@ -190,7 +204,7 @@ function ChestBanner({ bench, chestPhisique, onEdit }: { bench: unknown, chestPh
   );
 }
 
-function BackBanner({ pull, backPhisique, onEdit }: { pull: unknown, backPhisique: unknown, onEdit: () => void }) {
+function BackBanner({ pull, backPhisique, onEdit }: { pull: SegmentData | null, backPhisique: SegmentData | null, onEdit: () => void }) {
   const left = -175;
   const top = -100;
   const totalPoints = (pull?.points || 0) + (backPhisique?.points || 0);
@@ -257,17 +271,16 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [gymscore, setGymscore] = useState<number | null>(null);
   const hideTimeout = useRef<NodeJS.Timeout | null>(null);
-  const [squatsData, setSquatsData] = useState<Record<string, unknown> | null>(null);
-  const [legsPhisiqueData, setLegsPhisiqueData] = useState<Record<string, unknown> | null>(null);
-  const [curlsData, setCurlsData] = useState<Record<string, unknown> | null>(null);
-  const [armsPhisiqueData, setArmsPhisiqueData] = useState<Record<string, unknown> | null>(null);
-  const [benchData, setBenchData] = useState<Record<string, unknown> | null>(null);
-  const [chestPhisiqueData, setChestPhisiqueData] = useState<Record<string, unknown> | null>(null);
-  const [pullData, setPullData] = useState<Record<string, unknown> | null>(null);
-  const [backPhisiqueData, setBackPhisiqueData] = useState<Record<string, unknown> | null>(null);
-  const [frequencyData, setFrequencyData] = useState<Record<string, unknown> | null>(null);
+  const [squatsData, setSquatsData] = useState<SegmentData | null>(null);
+  const [legsPhisiqueData, setLegsPhisiqueData] = useState<SegmentData | null>(null);
+  const [curlsData, setCurlsData] = useState<SegmentData | null>(null);
+  const [armsPhisiqueData, setArmsPhisiqueData] = useState<SegmentData | null>(null);
+  const [benchData, setBenchData] = useState<SegmentData | null>(null);
+  const [chestPhisiqueData, setChestPhisiqueData] = useState<SegmentData | null>(null);
+  const [pullData, setPullData] = useState<SegmentData | null>(null);
+  const [backPhisiqueData, setBackPhisiqueData] = useState<SegmentData | null>(null);
+  const [frequencyData, setFrequencyData] = useState<Frequency | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editSegment, setEditSegment] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string | number>>({});
   const [authModalOpen, setAuthModalOpen] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
@@ -524,7 +537,6 @@ export default function Home() {
                       {hoveredSegment === 0 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
                           <LegsBanner squats={squatsData} legsPhisique={legsPhisiqueData} onEdit={() => {
-                            setEditSegment('Squats');
                             setEditValues({
                               'Bench Press': benchData?.weight ?? '',
                               'Squats': squatsData?.weight ?? '',
@@ -539,7 +551,6 @@ export default function Home() {
                       {hoveredSegment === 4 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
                           <ArmsBanner curls={curlsData} armsPhisique={armsPhisiqueData} onEdit={() => {
-                            setEditSegment('Biceps Curls');
                             setEditValues({
                               'Bench Press': benchData?.weight ?? '',
                               'Squats': squatsData?.weight ?? '',
@@ -554,7 +565,6 @@ export default function Home() {
                       {hoveredSegment === 2 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
                           <FrequencyBanner frequency={frequencyData} onEdit={() => {
-                            setEditSegment('Frequency');
                             setEditValues({
                               'Bench Press': benchData?.weight ?? '',
                               'Squats': squatsData?.weight ?? '',
@@ -569,7 +579,6 @@ export default function Home() {
                       {hoveredSegment === 3 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
                           <BackBanner pull={pullData} backPhisique={backPhisiqueData} onEdit={() => {
-                            setEditSegment('Wide Grip Pull');
                             setEditValues({
                               'Bench Press': benchData?.weight ?? '',
                               'Squats': squatsData?.weight ?? '',
@@ -584,7 +593,6 @@ export default function Home() {
                       {hoveredSegment === 1 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
                           <ChestBanner bench={benchData} chestPhisique={chestPhisiqueData} onEdit={() => {
-                            setEditSegment('Bench Press');
                             setEditValues({
                               'Bench Press': benchData?.weight ?? '',
                               'Squats': squatsData?.weight ?? '',
@@ -603,7 +611,7 @@ export default function Home() {
                 <div className="flex flex-col items-center mt-10">
                   <SharePopover />
                 </div>
-                <EditForm open={editModalOpen} onClose={() => setEditModalOpen(false)} segment={editSegment} currentValues={editValues} onEdit={handleEditSubmit} />
+                <EditForm open={editModalOpen} onClose={() => setEditModalOpen(false)} currentValues={editValues} onEdit={handleEditSubmit} />
               </main>
             </>
           )}

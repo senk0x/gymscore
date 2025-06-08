@@ -165,8 +165,11 @@ export default function ShareClientPage(props: ShareClientPageProps) {
             <SegmentBanner
               label="🔵 Legs"
               value={squatsData ? `Squats: ${squatsData.weight}${squatsData.unit}` : '--'}
-              phisique={legsPhisiqueData ? { grade: legsPhisiqueData.grade } : undefined}
-              points={(squatsData?.points || 0) + (legsPhisiqueData?.points || 0)}
+              phisique={legsPhisiqueData ? { grade: typeof legsPhisiqueData.grade === 'string' ? legsPhisiqueData.grade : null } : undefined}
+              points={
+                (typeof squatsData?.points === 'number' ? squatsData.points : 0) +
+                (typeof legsPhisiqueData?.points === 'number' ? legsPhisiqueData.points : 0)
+              }
               position={{ left: 400 - 40, top: 400 - 80 }}
               readOnly
             />
@@ -175,8 +178,11 @@ export default function ShareClientPage(props: ShareClientPageProps) {
             <SegmentBanner
               label="🟢 Arms"
               value={curlsData ? `Biceps curl: ${curlsData.weight}${curlsData.unit}` : '--'}
-              phisique={armsPhisiqueData ? { grade: armsPhisiqueData.grade } : undefined}
-              points={(curlsData?.points || 0) + (armsPhisiqueData?.points || 0)}
+              phisique={armsPhisiqueData ? { grade: typeof armsPhisiqueData.grade === 'string' ? armsPhisiqueData.grade : null } : undefined}
+              points={
+                (typeof curlsData?.points === 'number' ? curlsData.points : 0) +
+                (typeof armsPhisiqueData?.points === 'number' ? armsPhisiqueData.points : 0)
+              }
               position={{ left: 400 - 40, top: -60 }}
               readOnly
             />
@@ -185,7 +191,7 @@ export default function ShareClientPage(props: ShareClientPageProps) {
             <SegmentBanner
               label="🟠 Frequency"
               value={frequencyData ? `${frequencyData.days_per_week}/week` : '--'}
-              points={frequencyData?.points || 0}
+              points={typeof frequencyData?.points === 'number' ? frequencyData.points : 0}
               position={{ left: -275, top: 200 - 60 }}
               readOnly
             />
@@ -194,8 +200,11 @@ export default function ShareClientPage(props: ShareClientPageProps) {
             <SegmentBanner
               label="🟣 Back"
               value={pullData ? `Wide Grip Pull: ${pullData.weight}${pullData.unit}` : '--'}
-              phisique={backPhisiqueData ? { grade: backPhisiqueData.grade } : undefined}
-              points={(pullData?.points || 0) + (backPhisiqueData?.points || 0)}
+              phisique={backPhisiqueData ? { grade: typeof backPhisiqueData.grade === 'string' ? backPhisiqueData.grade : null } : undefined}
+              points={
+                (typeof pullData?.points === 'number' ? pullData.points : 0) +
+                (typeof backPhisiqueData?.points === 'number' ? backPhisiqueData.points : 0)
+              }
               position={{ left: -175, top: -100 }}
               readOnly
             />
@@ -204,8 +213,11 @@ export default function ShareClientPage(props: ShareClientPageProps) {
             <SegmentBanner
               label="🔴 Chest"
               value={benchData ? `Bench Press: ${benchData.weight}${benchData.unit}` : '--'}
-              phisique={chestPhisiqueData ? { grade: chestPhisiqueData.grade } : undefined}
-              points={(benchData?.points || 0) + (chestPhisiqueData?.points || 0)}
+              phisique={chestPhisiqueData ? { grade: typeof chestPhisiqueData.grade === 'string' ? chestPhisiqueData.grade : null } : undefined}
+              points={
+                (typeof benchData?.points === 'number' ? benchData.points : 0) +
+                (typeof chestPhisiqueData?.points === 'number' ? chestPhisiqueData.points : 0)
+              }
               position={{ left: -175, top: 400 - 40 }}
               readOnly
             />
