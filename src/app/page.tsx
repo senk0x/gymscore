@@ -1,18 +1,14 @@
 "use client";
 import Image from "next/image";
-import { CircleUserRound, LogOut, SquarePen } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Component as SharePopover } from "@/components/ui/demo";
 import { OnboardingFlow } from "@/components/OnboardingFlow";
 import { supabase } from '@/lib/supabaseClient';
 import { EditForm } from '@/components/EditForm';
 import { AuthForm } from '@/components/AuthForm';
-import { Session, User } from '@supabase/supabase-js';
 import { useAuth } from '@/context/AuthContext';
-import { SignInButton } from '@/components/ui/sign-in-button';
-import { SignOutButton } from '@/components/ui/sign-out-button';
 import { ProfileIcon } from '@/components/ui/ProfileIcon';
-import { SegmentBanner } from '@/components/ui/SegmentBanner';
+import { SquarePen } from 'lucide-react';
 
 function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
   // Ring settings
@@ -52,152 +48,7 @@ function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
   );
 }
 
-const exercises = [
-  { name: '🔵 Squats', weight: '110kg', points: 55, color: '#4F46B1' },
-  { name: '🟢 Bench Press', weight: '100kg', points: 50, color: '#46B152' },
-  { name: '🟡 Deadlift', weight: '150kg', points: 70, color: '#B18F46' },
-  { name: '🟣 Pull Ups', weight: '20kg', points: 40, color: '#8846B1' },
-  { name: '🔴 Push Ups', weight: '80kg', points: 30, color: '#B14648' },
-];
-
-function ExerciseBanner({ segmentIndex }: { segmentIndex: number }) {
-  // Blue segment banner: bottom right of the circle
-  const left = 400 - 40;
-  const top = 400 - 80;
-  const exercise = exercises[segmentIndex];
-
-  return (
-    <div style={{
-      position: 'absolute',
-      left,
-      top,
-      transform: 'translate(0%, 0%)',
-      width: 260,
-      background: '#232326',
-      border: '1.5px solid #3D3D40',
-      borderRadius: 20,
-      color: '#fff',
-      boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-      padding: 0,
-      zIndex: 20
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div>
-            <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.name}</div>
-            <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{exercise.weight}</div>
-          </div>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.points}</div>
-          <div style={{ fontFamily: 'Poppins', fontSize: 12, color: '#fff' }}>points</div>
-        </div>
-      </div>
-      <hr style={{ border: 'none', borderTop: '1px solid #3D3D40', margin: '21px 0 0 0' }} />
-      <button
-        className="flex items-center gap-2 px-[14px] py-[21px] w-full text-[15px] poppins-medium text-[#777779] rounded-b-2xl hover:bg-[#3D3D40] transition-colors"
-        style={{ border: 'none', outline: 'none', cursor: 'pointer', borderTopLeftRadius: 0, borderTopRightRadius: 0, justifyContent: 'flex-start' }}
-        onClick={() => {}}
-      >
-        <SquarePen size={16} color="#777779" />
-        <span>Edit</span>
-      </button>
-    </div>
-  );
-}
-
-function BicepsCurlBanner() {
-  // Green segment banner: top right of the circle
-  const left = 400 - 40;
-  const top = -60;
-  const exercise = { name: '🟢 Biceps curl', weight: '40kg', points: 20 };
-
-  return (
-    <div style={{
-      position: 'absolute',
-      left,
-      top,
-      transform: 'translate(0%, 0%)',
-      width: 260,
-      background: '#232326',
-      border: '1.5px solid #3D3D40',
-      borderRadius: 20,
-      color: '#fff',
-      boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-      padding: 0,
-      zIndex: 20
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div>
-            <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.name}</div>
-            <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{exercise.weight}</div>
-          </div>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.points}</div>
-          <div style={{ fontFamily: 'Poppins', fontSize: 12, color: '#fff' }}>points</div>
-        </div>
-      </div>
-      <hr style={{ border: 'none', borderTop: '1px solid #3D3D40', margin: '21px 0 0 0' }} />
-      <button
-        className="flex items-center gap-2 px-[14px] py-[21px] w-full text-[15px] poppins-medium text-[#777779] rounded-b-2xl hover:bg-[#3D3D40] transition-colors"
-        style={{ border: 'none', outline: 'none', cursor: 'pointer', borderTopLeftRadius: 0, borderTopRightRadius: 0, justifyContent: 'flex-start' }}
-        onClick={() => {}}
-      >
-        <SquarePen size={16} color="#777779" />
-        <span>Edit</span>
-      </button>
-    </div>
-  );
-}
-
-function PhysiqueBanner() {
-  // Yellow segment banner: left of the circle, vertically centered
-  const left = -275;
-  const top = 200 - 60; // center minus half banner height
-  const exercise = { name: '🟠 Physique', weight: '10/10', points: 150 };
-
-  return (
-    <div style={{
-      position: 'absolute',
-      left,
-      top,
-      width: 260,
-      background: '#232326',
-      border: '1.5px solid #3D3D40',
-      borderRadius: 20,
-      color: '#fff',
-      boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-      padding: 0,
-      zIndex: 20
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div>
-            <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.name}</div>
-            <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{exercise.weight}</div>
-          </div>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.points}</div>
-          <div style={{ fontFamily: 'Poppins', fontSize: 12, color: '#fff' }}>points</div>
-        </div>
-      </div>
-      <hr style={{ border: 'none', borderTop: '1px solid #3D3D40', margin: '21px 0 0 0' }} />
-      <button
-        className="flex items-center gap-2 px-[14px] py-[21px] w-full text-[15px] poppins-medium text-[#777779] rounded-b-2xl hover:bg-[#3D3D40] transition-colors"
-        style={{ border: 'none', outline: 'none', cursor: 'pointer', borderTopLeftRadius: 0, borderTopRightRadius: 0, justifyContent: 'flex-start' }}
-        onClick={() => {}}
-      >
-        <SquarePen size={16} color="#777779" />
-        <span>Edit</span>
-      </button>
-    </div>
-  );
-}
-
-function FrequencyBanner({ frequency, onEdit }: { frequency: any, onEdit: () => void }) {
+function FrequencyBanner({ frequency, onEdit }: { frequency: unknown, onEdit: () => void }) {
   const left = -275;
   const top = 200 - 60;
   const totalPoints = frequency ? frequency.points : 0;
@@ -226,52 +77,7 @@ function FrequencyBanner({ frequency, onEdit }: { frequency: any, onEdit: () => 
   );
 }
 
-function BenchPressBanner() {
-  // Red segment banner: bottom left of the circle
-  const left = -175;
-  const top = 400 - 40;
-  const exercise = { name: '🔴 Bench Press', weight: '100kg', points: 60 };
-
-  return (
-    <div style={{
-      position: 'absolute',
-      left,
-      top,
-      width: 260,
-      background: '#232326',
-      border: '1.5px solid #3D3D40',
-      borderRadius: 20,
-      color: '#fff',
-      boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-      padding: 0,
-      zIndex: 20
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div>
-            <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.name}</div>
-            <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{exercise.weight}</div>
-          </div>
-        </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>{exercise.points}</div>
-          <div style={{ fontFamily: 'Poppins', fontSize: 12, color: '#fff' }}>points</div>
-        </div>
-      </div>
-      <hr style={{ border: 'none', borderTop: '1px solid #3D3D40', margin: '21px 0 0 0' }} />
-      <button
-        className="flex items-center gap-2 px-[14px] py-[21px] w-full text-[15px] poppins-medium text-[#777779] rounded-b-2xl hover:bg-[#3D3D40] transition-colors"
-        style={{ border: 'none', outline: 'none', cursor: 'pointer', borderTopLeftRadius: 0, borderTopRightRadius: 0, justifyContent: 'flex-start' }}
-        onClick={() => {}}
-      >
-        <SquarePen size={16} color="#777779" />
-        <span>Edit</span>
-      </button>
-    </div>
-  );
-}
-
-function LegsBanner({ squats, legsPhisique, onEdit }: { squats: any, legsPhisique: any, onEdit: () => void }) {
+function LegsBanner({ squats, legsPhisique, onEdit }: { squats: unknown, legsPhisique: unknown, onEdit: () => void }) {
   // Blue segment banner: bottom right of the circle
   const left = 400 - 40;
   const top = 400 - 80;
@@ -324,7 +130,7 @@ function LegsBanner({ squats, legsPhisique, onEdit }: { squats: any, legsPhisiqu
   );
 }
 
-function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: any, armsPhisique: any, onEdit: () => void }) {
+function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: unknown, armsPhisique: unknown, onEdit: () => void }) {
   const left = 400 - 40;
   const top = -60;
   const totalPoints = (curls?.points || 0) + (armsPhisique?.points || 0);
@@ -354,7 +160,7 @@ function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: any, armsPhisique:
   );
 }
 
-function ChestBanner({ bench, chestPhisique, onEdit }: { bench: any, chestPhisique: any, onEdit: () => void }) {
+function ChestBanner({ bench, chestPhisique, onEdit }: { bench: unknown, chestPhisique: unknown, onEdit: () => void }) {
   const left = -175;
   const top = 400 - 40;
   const totalPoints = (bench?.points || 0) + (chestPhisique?.points || 0);
@@ -384,7 +190,7 @@ function ChestBanner({ bench, chestPhisique, onEdit }: { bench: any, chestPhisiq
   );
 }
 
-function BackBanner({ pull, backPhisique, onEdit }: { pull: any, backPhisique: any, onEdit: () => void }) {
+function BackBanner({ pull, backPhisique, onEdit }: { pull: unknown, backPhisique: unknown, onEdit: () => void }) {
   const left = -175;
   const top = -100;
   const totalPoints = (pull?.points || 0) + (backPhisique?.points || 0);
@@ -414,7 +220,7 @@ function BackBanner({ pull, backPhisique, onEdit }: { pull: any, backPhisique: a
   );
 }
 
-function ProfileBanner({ name, email, onClose, onLogout }: { name: string; email: string; onClose: () => void; onLogout: () => void }) {
+function ProfileBanner({ name, email, onLogout }: { name: string; email: string; onLogout: () => void }) {
   return (
     <div
       className="absolute right-0 top-[calc(100%+4px)] z-50 profile-banner transition-all duration-500 ease-out animate-profile-banner"
@@ -436,7 +242,7 @@ function ProfileBanner({ name, email, onClose, onLogout }: { name: string; email
           className="flex items-center gap-2 px-[14px] py-[21px] w-full text-[15px] poppins-medium text-[#777779] rounded-b-2xl hover:bg-[#3D3D40] transition-colors"
           onClick={onLogout}
         >
-          <LogOut size={16} color="#777779" />
+          <SquarePen size={16} color="#777779" />
           <span>Log out</span>
         </button>
       </div>
@@ -451,15 +257,15 @@ export default function Home() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [gymscore, setGymscore] = useState<number | null>(null);
   const hideTimeout = useRef<NodeJS.Timeout | null>(null);
-  const [squatsData, setSquatsData] = useState<any>(null);
-  const [legsPhisiqueData, setLegsPhisiqueData] = useState<any>(null);
-  const [curlsData, setCurlsData] = useState<any>(null);
-  const [armsPhisiqueData, setArmsPhisiqueData] = useState<any>(null);
-  const [benchData, setBenchData] = useState<any>(null);
-  const [chestPhisiqueData, setChestPhisiqueData] = useState<any>(null);
-  const [pullData, setPullData] = useState<any>(null);
-  const [backPhisiqueData, setBackPhisiqueData] = useState<any>(null);
-  const [frequencyData, setFrequencyData] = useState<any>(null);
+  const [squatsData, setSquatsData] = useState<Record<string, unknown> | null>(null);
+  const [legsPhisiqueData, setLegsPhisiqueData] = useState<Record<string, unknown> | null>(null);
+  const [curlsData, setCurlsData] = useState<Record<string, unknown> | null>(null);
+  const [armsPhisiqueData, setArmsPhisiqueData] = useState<Record<string, unknown> | null>(null);
+  const [benchData, setBenchData] = useState<Record<string, unknown> | null>(null);
+  const [chestPhisiqueData, setChestPhisiqueData] = useState<Record<string, unknown> | null>(null);
+  const [pullData, setPullData] = useState<Record<string, unknown> | null>(null);
+  const [backPhisiqueData, setBackPhisiqueData] = useState<Record<string, unknown> | null>(null);
+  const [frequencyData, setFrequencyData] = useState<Record<string, unknown> | null>(null);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editSegment, setEditSegment] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<Record<string, string | number>>({});
@@ -495,7 +301,7 @@ export default function Home() {
   };
 
   // Reusable function to fetch latest data
-  async function fetchLatestData() {
+  const fetchLatestData = useCallback(async () => {
     if (!user) return;
     // Squats/Legs
     const { data: squatsRows } = await supabase.from('exercises').select('*').eq('user_id', user.id).eq('exercise', 'Squats').order('created_at', { ascending: false }).limit(1);
@@ -523,12 +329,12 @@ export default function Home() {
     // Gymscore
     const { data: scoreRows } = await supabase.from('score').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1);
     setGymscore(scoreRows && scoreRows[0] ? scoreRows[0].score : null);
-  }
+  }, [user]);
 
   // Check for existing session on mount
   useEffect(() => {
     const getSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
+      const { data } = await supabase.auth.getSession();
       if (data?.session) {
         setAuthModalOpen(false);
       } else {
@@ -594,7 +400,7 @@ export default function Home() {
     if (user && !showOnboarding) {
       fetchLatestData();
     }
-  }, [user, showOnboarding]);
+  }, [user, showOnboarding, fetchLatestData]);
 
   async function handleEditSubmit(inputValues: Record<string, string | number>, unit: 'kg' | 'lbs') {
     if (!user) return;
@@ -694,7 +500,6 @@ export default function Home() {
                     <ProfileBanner
                       name={user?.user_metadata?.full_name || user?.email || ''}
                       email={user?.email || ''}
-                      onClose={() => setShowProfile(false)}
                       onLogout={async () => {
                         await supabase.auth.signOut();
                         setUser(null);

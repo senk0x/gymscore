@@ -5,12 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface EditFormProps {
   open: boolean;
   onClose: () => void;
-  segment?: string | null;
   currentValues?: Record<string, string | number>;
   onEdit?: (inputValues: Record<string, string | number>, unit: 'kg' | 'lbs') => void;
 }
 
-export function EditForm({ open, onClose, segment, currentValues = {}, onEdit }: EditFormProps) {
+export function EditForm({ open, onClose, currentValues = {}, onEdit }: EditFormProps) {
   // UI state only, no logic
   const [photoHover, setPhotoHover] = useState(false);
   const [focusedInput, setFocusedInput] = useState<string | null>(null);

@@ -18,6 +18,9 @@ export async function POST(request: Request) {
       );
     }
 
+    if (!GEMINI_API_KEY) {
+      throw new Error('GEMINI_API_KEY is not defined');
+    }
     console.log('API Key length:', GEMINI_API_KEY.length); // Debug log
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
     const prompt = `You are an expert fitness coach and physique judge.\nGiven a user's physique photo, analyze and rate the following muscle groups on a scale from 1 to 10 (no zeros):\n- Chest\n- Legs\n- Arms\n- Back\n\nIf a muscle group is not clearly visible in the photo, do NOT assign a zero. Instead, use your best judgment to estimate its score based on the visible muscle groups, overall proportions, and typical physique balance. Complete the picture as a human judge would, inferring likely development from the available evidence.\n\nReturn your answer strictly in this JSON format:\n{\n  \"chest\": <score 1-10>,\n  \"legs\": <score 1-10>,\n  \"arms\": <score 1-10>,\n  \"back\": <score 1-10>\n}\nReply with only the JSON object, and nothing else.`;
@@ -37,24 +40,22 @@ export async function POST(request: Request) {
       });
 
       return NextResponse.json({ result: response.text });
-    } catch (geminiError: any) {
+    } catch (geminiError: unknown) {
       console.error('Gemini API Error:', {
-        message: geminiError.message,
-        status: geminiError.status,
-        details: geminiError.details
+        message: geminiError instanceof Error ? geminiError.message : geminiError
       });
       return NextResponse.json(
-        { error: 'Gemini API error: ' + geminiError.message },
+        { error: 'Gemini API error: ' + (geminiError instanceof Error ? geminiError.message : geminiError) },
         { status: 500 }
       );
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error analyzing photo:', {
-      message: error.message,
-      stack: error.stack
+      message: error instanceof Error ? error.message : error,
+      stack: error instanceof Error ? error.stack : undefined
     });
     return NextResponse.json(
-      { error: 'Failed to analyze photo: ' + error.message },
+      { error: 'Failed to analyze photo: ' + (error instanceof Error ? error.message : error) },
       { status: 500 }
     );
   }

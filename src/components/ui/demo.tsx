@@ -10,7 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { RiCodeFill, RiFacebookFill, RiMailLine, RiTwitterXFill, RiWhatsappFill } from "@remixicon/react";
 import { Check, Copy } from "lucide-react";
 import { useId, useRef, useState } from "react";
 import { useAuth } from '@/context/AuthContext';
@@ -32,30 +31,6 @@ function Component() {
     }
   };
 
-  // Social share handlers
-  const handleShareX = () => {
-    if (!shareLink) return;
-    const text = encodeURIComponent('Check out my GymScore!');
-    const url = encodeURIComponent(shareLink);
-    window.open(`https://x.com/intent/tweet?text=${text}&url=${url}`, '_blank', 'noopener');
-  };
-  const handleShareFacebook = () => {
-    if (!shareLink) return;
-    const url = encodeURIComponent(shareLink);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'noopener');
-  };
-  const handleShareMail = () => {
-    if (!shareLink) return;
-    const subject = encodeURIComponent('Check out my GymScore!');
-    const body = encodeURIComponent(`Here is my GymScore: ${shareLink}`);
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
-  };
-  const handleShareWhatsapp = () => {
-    if (!shareLink) return;
-    const text = encodeURIComponent(`Check out my GymScore! ${shareLink}`);
-    window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener');
-  };
-
   return (
     <div className="flex flex-col gap-4">
       <Popover>
@@ -67,17 +42,6 @@ function Component() {
         <PopoverContent className="w-72 bg-[#232326] border-[#27272A] text-white shadow-lg rounded-2xl p-4 animate-fade-in animate-scale-in origin-top transition-all duration-300">
           <div className="flex flex-col gap-3 text-center">
             <div className="text-sm font-medium text-[#A0A0A0]">Share code</div>
-            <div className="flex flex-wrap justify-center gap-2">
-              <Button size="icon" variant="outline" aria-label="Share on Twitter" className="bg-[#232326] border-[#27272A] text-[#A0A0A0] hover:bg-[#27272A]" onClick={handleShareX}>
-                <RiTwitterXFill size={16} strokeWidth={2} aria-hidden="true" />
-              </Button>
-              <Button size="icon" variant="outline" aria-label="Share on Facebook" className="bg-[#232326] border-[#27272A] text-[#A0A0A0] hover:bg-[#27272A]" onClick={handleShareFacebook}>
-                <RiFacebookFill size={16} strokeWidth={2} aria-hidden="true" />
-              </Button>
-              <Button size="icon" variant="outline" aria-label="Share on WhatsApp" className="bg-[#232326] border-[#27272A] text-[#A0A0A0] hover:bg-[#27272A]" onClick={handleShareWhatsapp}>
-                <RiWhatsappFill size={16} strokeWidth={2} aria-hidden="true" />
-              </Button>
-            </div>
             <div className="space-y-2">
               <div className="relative">
                 <Input

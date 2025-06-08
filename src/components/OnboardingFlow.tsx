@@ -79,7 +79,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
 
           console.log('API Response:', data); // Debug log
           resolve(data.result);
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error('Error in analyzePhotoWithGemini:', err); // Debug log
           reject(err);
         }
@@ -118,7 +118,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           return obj;
         }
       }
-    } catch (jsonErr) {
+    } catch {
       // Fallback to regex below
     }
     // Fallback: Extract numbers using regex, looking for patterns like "X/10" or "X out of 10"
@@ -201,7 +201,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('exercise', ex.exercise)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (exercises):', fetchError);
-        const upsertPayload: any = {
+        const upsertPayload: unknown = {
           exercise: ex.exercise,
           weight: ex.weight,
           unit: ex.unit,
@@ -242,7 +242,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('muscle_group', ph.muscle_group)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (phisique):', fetchError);
-        const upsertPayload: any = {
+        const upsertPayload: unknown = {
           muscle_group: ph.muscle_group,
           grade: ph.grade,
           points: ph.points,
@@ -265,7 +265,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('user_id', userId)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (score):', fetchError);
-        const upsertPayload: any = {
+        const upsertPayload: unknown = {
           score: gymscore,
           last_update: now,
           user_id: userId,
@@ -286,7 +286,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
           .eq('user_id', userId)
           .maybeSingle();
         if (fetchError) console.error('Supabase fetch error (frequency):', fetchError);
-        const upsertPayload: any = {
+        const upsertPayload: unknown = {
           days_per_week: freq,
           points: freq * 15,
           last_update: now,
@@ -303,7 +303,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
       setIsLoading(false);
       // Insert into public_profiles if not exists
       if (user && user.id && user.email && user.user_metadata?.full_name) {
-        const { data: existingProfile, error: fetchProfileError } = await supabase
+        const { data: existingProfile } = await supabase
           .from('public_profiles')
           .select('id')
           .eq('user_id', user.id)
@@ -319,7 +319,7 @@ export function OnboardingFlow({ user, onComplete }: OnboardingFlowProps) {
         }
       }
       onComplete(gymscore, aiText);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setAiError('An error occurred while saving your data. Please try again.');
       setIsLoading(false);
       console.error('Onboarding save error:', err);

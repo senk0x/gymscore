@@ -4,13 +4,12 @@ import { SignInButton } from '@/components/ui/sign-in-button';
 
 interface AuthFormProps {
   open: boolean;
-  onClose: () => void;
   onAuth: (email: string, password: string, name: string, mode: 'login' | 'register') => void;
   mode: 'login' | 'register';
   onModeChange: (mode: 'login' | 'register') => void;
 }
 
-export function AuthForm({ open, onClose, onAuth, mode, onModeChange }: AuthFormProps) {
+export function AuthForm({ open, onAuth, mode, onModeChange }: AuthFormProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');

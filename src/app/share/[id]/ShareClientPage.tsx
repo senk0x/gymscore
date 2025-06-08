@@ -11,15 +11,15 @@ import { LogOut } from 'lucide-react';
 interface ShareClientPageProps {
   userName: string;
   gymscore: number | null;
-  benchData: any;
-  squatsData: any;
-  curlsData: any;
-  pullData: any;
-  frequencyData: any;
-  chestPhisiqueData: any;
-  legsPhisiqueData: any;
-  armsPhisiqueData: any;
-  backPhisiqueData: any;
+  benchData: Record<string, unknown> | null;
+  squatsData: Record<string, unknown> | null;
+  curlsData: Record<string, unknown> | null;
+  pullData: Record<string, unknown> | null;
+  frequencyData: Record<string, unknown> | null;
+  chestPhisiqueData: Record<string, unknown> | null;
+  legsPhisiqueData: Record<string, unknown> | null;
+  armsPhisiqueData: Record<string, unknown> | null;
+  backPhisiqueData: Record<string, unknown> | null;
 }
 
 function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
@@ -61,7 +61,7 @@ function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
 }
 
 // ProfileBanner copied from Home Page
-function ProfileBanner({ name, email, onClose, onLogout }: { name: string; email: string; onClose: () => void; onLogout: () => void }) {
+function ProfileBanner({ name, email, onLogout }: { name: string; email: string; onLogout: () => void }) {
   return (
     <div
       className="absolute right-0 top-[calc(100%+4px)] z-50 profile-banner transition-all duration-500 ease-out animate-profile-banner"
@@ -133,7 +133,6 @@ export default function ShareClientPage(props: ShareClientPageProps) {
                 <ProfileBanner
                   name={user.user_metadata?.full_name || user.email || ''}
                   email={user.email || ''}
-                  onClose={() => setShowProfile(false)}
                   onLogout={async () => {
                     await router.push('/?auth=1');
                   }}

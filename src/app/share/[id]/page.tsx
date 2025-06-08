@@ -1,13 +1,12 @@
 import ShareClientPage from './ShareClientPage';
-
-interface SharePageProps {
-  params: { id: string };
-}
-
 import { supabase } from '@/lib/supabaseClient';
 
-export default async function SharePage({ params }: SharePageProps) {
-  const userId = params.id;
+interface PageProps {
+  params: Record<string, string | string[] | undefined>;
+}
+
+export default async function Page({ params }: PageProps) {
+  const userId = Array.isArray(params.id) ? params.id[0] : params.id || '';
   // Fetch the latest gymscore for this user
   const { data: scoreRows } = await supabase
     .from('score')
