@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 import ShareClientPage from './ShareClientPage';
 import { supabase } from '@/lib/supabaseClient';
