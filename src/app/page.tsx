@@ -70,7 +70,7 @@ function getBannerStyle(base: React.CSSProperties, custom?: React.CSSProperties)
     left: '50%',
     transform: 'translateX(-50%)',
     boxSizing: 'border-box',
-    ...(window.innerWidth > 640 ? custom : {}),
+    ...(custom || {}),
   };
 }
 
@@ -78,8 +78,20 @@ function FrequencyBanner({ frequency, onEdit }: { frequency: Frequency | null, o
   const left = -275;
   const top = 200 - 60;
   const totalPoints = frequency ? frequency.points : 0;
+  const baseStyle: React.CSSProperties = {
+    position: 'absolute',
+    left,
+    top,
+    background: '#232326',
+    border: '1.5px solid #3D3D40',
+    borderRadius: 20,
+    color: '#fff',
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
+    padding: 0,
+    zIndex: 20,
+  };
   return (
-    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
+    <div style={getBannerStyle(baseStyle)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
           <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟠 Frequency</div>
@@ -112,7 +124,7 @@ function LegsBanner({ squats, legsPhisique, onEdit }: { squats: SegmentData | nu
   const left = 400 - 40;
   const top = 400 - 80;
   const totalPoints = (squats?.points || 0) + (legsPhisique?.points || 0);
-  const baseStyle = {
+  const baseStyle: React.CSSProperties = {
     position: 'absolute',
     top,
     background: '#232326',
@@ -161,8 +173,20 @@ function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: SegmentData | null
   const left = 400 - 40;
   const top = -60;
   const totalPoints = (curls?.points || 0) + (armsPhisique?.points || 0);
+  const baseStyle: React.CSSProperties = {
+    position: 'absolute',
+    left,
+    top,
+    background: '#232326',
+    border: '1.5px solid #3D3D40',
+    borderRadius: 20,
+    color: '#fff',
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
+    padding: 0,
+    zIndex: 20,
+  };
   return (
-    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
+    <div style={getBannerStyle(baseStyle)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟢 Arms</div>
@@ -191,8 +215,20 @@ function ChestBanner({ bench, chestPhisique, onEdit }: { bench: SegmentData | nu
   const left = -175;
   const top = 400 - 40;
   const totalPoints = (bench?.points || 0) + (chestPhisique?.points || 0);
+  const baseStyle: React.CSSProperties = {
+    position: 'absolute',
+    left,
+    top,
+    background: '#232326',
+    border: '1.5px solid #3D3D40',
+    borderRadius: 20,
+    color: '#fff',
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
+    padding: 0,
+    zIndex: 20,
+  };
   return (
-    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
+    <div style={getBannerStyle(baseStyle)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🔴 Chest</div>
@@ -221,8 +257,20 @@ function BackBanner({ pull, backPhisique, onEdit }: { pull: SegmentData | null, 
   const left = -175;
   const top = -100;
   const totalPoints = (pull?.points || 0) + (backPhisique?.points || 0);
+  const baseStyle: React.CSSProperties = {
+    position: 'absolute',
+    left,
+    top,
+    background: '#232326',
+    border: '1.5px solid #3D3D40',
+    borderRadius: 20,
+    color: '#fff',
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
+    padding: 0,
+    zIndex: 20,
+  };
   return (
-    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
+    <div style={getBannerStyle(baseStyle)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟣 Back</div>
