@@ -11,7 +11,20 @@ interface SegmentBannerProps {
   onEdit?: () => void;
 }
 
+function convertKgToLbs(kg: number | undefined): number | undefined {
+  if (typeof kg !== 'number') return undefined;
+  return Math.round(kg * 2.20462);
+}
+
 export function SegmentBanner({ label, value, phisique, points, position, readOnly, onEdit }: SegmentBannerProps) {
+  // If value is a string like '98kg', convert to lbs
+  let displayValue = value;
+  if (typeof value === 'string' && value.endsWith('kg')) {
+    const num = parseFloat(value.replace('kg', ''));
+    if (!isNaN(num)) {
+      displayValue = `${convertKgToLbs(num)}lbs`;
+    }
+  }
   return (
     <div
       style={{ position: "absolute", zIndex: 20, ...position }}
@@ -23,7 +36,7 @@ export function SegmentBanner({ label, value, phisique, points, position, readOn
         <div>
           <div className="font-poppins font-semibold text-[clamp(1rem,3vw,1.1rem)]">{label}</div>
           {value !== undefined && (
-            <div className="text-[#A0A0A0] font-poppins text-[clamp(0.75rem,2vw,0.9rem)] mt-0.5">{value}</div>
+            <div className="text-[#A0A0A0] font-poppins text-[clamp(0.75rem,2vw,0.9rem)] mt-0.5">{displayValue}</div>
           )}
           {phisique && (
             <div className="text-[#A0A0A0] font-poppins text-[clamp(0.75rem,2vw,0.9rem)] mt-0.5">

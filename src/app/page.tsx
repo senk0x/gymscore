@@ -8,7 +8,7 @@ import { EditForm } from '@/components/EditForm';
 import { AuthForm } from '@/components/AuthForm';
 import { useAuth } from '@/context/AuthContext';
 import { ProfileIcon } from '@/components/ui/ProfileIcon';
-import { SquarePen } from 'lucide-react';
+import { SquarePen, LogOut } from 'lucide-react';
 
 interface Frequency {
   points: number;
@@ -62,12 +62,24 @@ function ScoreRing({ onHover }: { onHover: (index: number | null) => void }) {
   );
 }
 
+function getBannerStyle(base: React.CSSProperties, custom?: React.CSSProperties): React.CSSProperties {
+  return {
+    ...base,
+    width: '95vw',
+    maxWidth: 260,
+    left: '50%',
+    transform: 'translateX(-50%)',
+    boxSizing: 'border-box',
+    ...(window.innerWidth > 640 ? custom : {}),
+  };
+}
+
 function FrequencyBanner({ frequency, onEdit }: { frequency: Frequency | null, onEdit: () => void }) {
   const left = -275;
   const top = 200 - 60;
   const totalPoints = frequency ? frequency.points : 0;
   return (
-    <div style={{ position: 'absolute', left, top, width: 260, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 }}>
+    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
           <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟠 Frequency</div>
@@ -91,33 +103,34 @@ function FrequencyBanner({ frequency, onEdit }: { frequency: Frequency | null, o
   );
 }
 
+function convertKgToLbs(kg: number | undefined): number | undefined {
+  if (typeof kg !== 'number') return undefined;
+  return Math.round(kg * 2.20462);
+}
+
 function LegsBanner({ squats, legsPhisique, onEdit }: { squats: SegmentData | null, legsPhisique: SegmentData | null, onEdit: () => void }) {
-  // Blue segment banner: bottom right of the circle
   const left = 400 - 40;
   const top = 400 - 80;
   const totalPoints = (squats?.points || 0) + (legsPhisique?.points || 0);
-
+  const baseStyle = {
+    position: 'absolute',
+    top,
+    background: '#232326',
+    border: '1.5px solid #3D3D40',
+    borderRadius: 20,
+    color: '#fff',
+    boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
+    padding: 0,
+    zIndex: 20,
+  };
   return (
-    <div style={{
-      position: 'absolute',
-      left,
-      top,
-      transform: 'translate(0%, 0%)',
-      width: 260,
-      background: '#232326',
-      border: '1.5px solid #3D3D40',
-      borderRadius: 20,
-      color: '#fff',
-      boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)',
-      padding: 0,
-      zIndex: 20
-    }}>
+    <div style={getBannerStyle(baseStyle, { left })}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div>
             <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🔵 Legs</div>
             <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>
-              Squats: {squats ? `${squats.weight}${squats.unit}` : '--'}
+              Squats: {squats ? `${convertKgToLbs(squats.weight)}lbs` : '--'}
             </div>
             <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>
               Phisique: {legsPhisique ? legsPhisique.grade : '--'}
@@ -149,11 +162,11 @@ function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: SegmentData | null
   const top = -60;
   const totalPoints = (curls?.points || 0) + (armsPhisique?.points || 0);
   return (
-    <div style={{ position: 'absolute', left, top, width: 260, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 }}>
+    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟢 Arms</div>
-          <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>Biceps curl: {curls ? `${curls.weight}${curls.unit}` : '--'}</div>
+          <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>Biceps curl: {curls ? `${convertKgToLbs(curls.weight)}lbs` : '--'}</div>
           <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{armsPhisique ? `${armsPhisique.grade} phisique score` : '--'}</div>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -179,11 +192,11 @@ function ChestBanner({ bench, chestPhisique, onEdit }: { bench: SegmentData | nu
   const top = 400 - 40;
   const totalPoints = (bench?.points || 0) + (chestPhisique?.points || 0);
   return (
-    <div style={{ position: 'absolute', left, top, width: 260, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 }}>
+    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🔴 Chest</div>
-          <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>Bench Press: {bench ? `${bench.weight}${bench.unit}` : '--'}</div>
+          <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>Bench Press: {bench ? `${convertKgToLbs(bench.weight)}lbs` : '--'}</div>
           <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{chestPhisique ? `${chestPhisique.grade} phisique score` : '--'}</div>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -209,11 +222,11 @@ function BackBanner({ pull, backPhisique, onEdit }: { pull: SegmentData | null, 
   const top = -100;
   const totalPoints = (pull?.points || 0) + (backPhisique?.points || 0);
   return (
-    <div style={{ position: 'absolute', left, top, width: 260, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 }}>
+    <div style={getBannerStyle({ position: 'absolute', left, top, background: '#232326', border: '1.5px solid #3D3D40', borderRadius: 20, color: '#fff', boxShadow: '0 2px 16px 0 rgba(0,0,0,0.10)', padding: 0, zIndex: 20 })}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟣 Back</div>
-          <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>Wide Grip Pull: {pull ? `${pull.weight}${pull.unit}` : '--'}</div>
+          <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>Wide Grip Pull: {pull ? `${convertKgToLbs(pull.weight)}lbs` : '--'}</div>
           <div style={{ color: '#A0A0A0', fontFamily: 'Poppins', fontSize: 12, marginTop: 2 }}>{backPhisique ? `${backPhisique.grade} phisique score` : '--'}</div>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -256,7 +269,7 @@ function ProfileBanner({ name, email, onLogout }: { name: string; email: string;
           className="flex items-center gap-2 px-[14px] py-[21px] w-full text-[15px] poppins-medium text-[#777779] rounded-b-2xl hover:bg-[#3D3D40] transition-colors"
           onClick={onLogout}
         >
-          <SquarePen size={16} color="#777779" />
+          <LogOut size={16} color="#777779" />
           <span>Log out</span>
         </button>
       </div>
