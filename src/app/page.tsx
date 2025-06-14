@@ -76,12 +76,10 @@ function getBannerStyle(base: React.CSSProperties, custom?: React.CSSProperties)
 }
 
 function FrequencyBanner({ frequency, onEdit, position }: { frequency: Frequency | null, onEdit: () => void, position: React.CSSProperties }) {
-  const left = -275;
   const top = 200 - 60;
   const totalPoints = frequency ? frequency.points : 0;
   const baseStyle: React.CSSProperties = {
     position: 'absolute',
-    left,
     top,
     background: '#232326',
     border: '1.5px solid #3D3D40',
@@ -122,7 +120,6 @@ function convertKgToLbs(kg: number | undefined): number | undefined {
 }
 
 function LegsBanner({ squats, legsPhisique, onEdit, position }: { squats: SegmentData | null, legsPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
-  const left = 400 - 40;
   const top = 400 - 80;
   const totalPoints = (squats?.points || 0) + (legsPhisique?.points || 0);
   const baseStyle: React.CSSProperties = {
@@ -171,12 +168,10 @@ function LegsBanner({ squats, legsPhisique, onEdit, position }: { squats: Segmen
 }
 
 function ArmsBanner({ curls, armsPhisique, onEdit, position }: { curls: SegmentData | null, armsPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
-  const left = 400 - 40;
   const top = -60;
   const totalPoints = (curls?.points || 0) + (armsPhisique?.points || 0);
   const baseStyle: React.CSSProperties = {
     position: 'absolute',
-    left,
     top,
     background: '#232326',
     border: '1.5px solid #3D3D40',
@@ -213,12 +208,10 @@ function ArmsBanner({ curls, armsPhisique, onEdit, position }: { curls: SegmentD
 }
 
 function ChestBanner({ bench, chestPhisique, onEdit, position }: { bench: SegmentData | null, chestPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
-  const left = -175;
   const top = 400 - 40;
   const totalPoints = (bench?.points || 0) + (chestPhisique?.points || 0);
   const baseStyle: React.CSSProperties = {
     position: 'absolute',
-    left,
     top,
     background: '#232326',
     border: '1.5px solid #3D3D40',
@@ -255,12 +248,10 @@ function ChestBanner({ bench, chestPhisique, onEdit, position }: { bench: Segmen
 }
 
 function BackBanner({ pull, backPhisique, onEdit, position }: { pull: SegmentData | null, backPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
-  const left = -175;
   const top = -100;
   const totalPoints = (pull?.points || 0) + (backPhisique?.points || 0);
   const baseStyle: React.CSSProperties = {
     position: 'absolute',
-    left,
     top,
     background: '#232326',
     border: '1.5px solid #3D3D40',
