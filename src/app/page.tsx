@@ -9,6 +9,7 @@ import { AuthForm } from '@/components/AuthForm';
 import { useAuth } from '@/context/AuthContext';
 import { ProfileIcon } from '@/components/ui/ProfileIcon';
 import { SquarePen, LogOut } from 'lucide-react';
+import { useIsWideScreen } from "../utils/useIsWideScreen";
 
 interface Frequency {
   points: number;
@@ -74,7 +75,7 @@ function getBannerStyle(base: React.CSSProperties, custom?: React.CSSProperties)
   };
 }
 
-function FrequencyBanner({ frequency, onEdit }: { frequency: Frequency | null, onEdit: () => void }) {
+function FrequencyBanner({ frequency, onEdit, position }: { frequency: Frequency | null, onEdit: () => void, position: React.CSSProperties }) {
   const left = -275;
   const top = 200 - 60;
   const totalPoints = frequency ? frequency.points : 0;
@@ -91,7 +92,7 @@ function FrequencyBanner({ frequency, onEdit }: { frequency: Frequency | null, o
     zIndex: 20,
   };
   return (
-    <div style={getBannerStyle(baseStyle)}>
+    <div style={getBannerStyle(baseStyle, position)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
           <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟠 Frequency</div>
@@ -120,7 +121,7 @@ function convertKgToLbs(kg: number | undefined): number | undefined {
   return Math.round(kg * 2.20462);
 }
 
-function LegsBanner({ squats, legsPhisique, onEdit }: { squats: SegmentData | null, legsPhisique: SegmentData | null, onEdit: () => void }) {
+function LegsBanner({ squats, legsPhisique, onEdit, position }: { squats: SegmentData | null, legsPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
   const left = 400 - 40;
   const top = 400 - 80;
   const totalPoints = (squats?.points || 0) + (legsPhisique?.points || 0);
@@ -136,7 +137,7 @@ function LegsBanner({ squats, legsPhisique, onEdit }: { squats: SegmentData | nu
     zIndex: 20,
   };
   return (
-    <div style={getBannerStyle(baseStyle, { left })}>
+    <div style={getBannerStyle(baseStyle, position)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div>
@@ -169,7 +170,7 @@ function LegsBanner({ squats, legsPhisique, onEdit }: { squats: SegmentData | nu
   );
 }
 
-function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: SegmentData | null, armsPhisique: SegmentData | null, onEdit: () => void }) {
+function ArmsBanner({ curls, armsPhisique, onEdit, position }: { curls: SegmentData | null, armsPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
   const left = 400 - 40;
   const top = -60;
   const totalPoints = (curls?.points || 0) + (armsPhisique?.points || 0);
@@ -186,7 +187,7 @@ function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: SegmentData | null
     zIndex: 20,
   };
   return (
-    <div style={getBannerStyle(baseStyle)}>
+    <div style={getBannerStyle(baseStyle, position)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟢 Arms</div>
@@ -211,7 +212,7 @@ function ArmsBanner({ curls, armsPhisique, onEdit }: { curls: SegmentData | null
   );
 }
 
-function ChestBanner({ bench, chestPhisique, onEdit }: { bench: SegmentData | null, chestPhisique: SegmentData | null, onEdit: () => void }) {
+function ChestBanner({ bench, chestPhisique, onEdit, position }: { bench: SegmentData | null, chestPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
   const left = -175;
   const top = 400 - 40;
   const totalPoints = (bench?.points || 0) + (chestPhisique?.points || 0);
@@ -228,7 +229,7 @@ function ChestBanner({ bench, chestPhisique, onEdit }: { bench: SegmentData | nu
     zIndex: 20,
   };
   return (
-    <div style={getBannerStyle(baseStyle)}>
+    <div style={getBannerStyle(baseStyle, position)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🔴 Chest</div>
@@ -253,7 +254,7 @@ function ChestBanner({ bench, chestPhisique, onEdit }: { bench: SegmentData | nu
   );
 }
 
-function BackBanner({ pull, backPhisique, onEdit }: { pull: SegmentData | null, backPhisique: SegmentData | null, onEdit: () => void }) {
+function BackBanner({ pull, backPhisique, onEdit, position }: { pull: SegmentData | null, backPhisique: SegmentData | null, onEdit: () => void, position: React.CSSProperties }) {
   const left = -175;
   const top = -100;
   const totalPoints = (pull?.points || 0) + (backPhisique?.points || 0);
@@ -270,7 +271,7 @@ function BackBanner({ pull, backPhisique, onEdit }: { pull: SegmentData | null, 
     zIndex: 20,
   };
   return (
-    <div style={getBannerStyle(baseStyle)}>
+    <div style={getBannerStyle(baseStyle, position)}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: 13, paddingRight: 13, paddingTop: 21 }}>
         <div>
           <div style={{ fontFamily: 'Poppins', fontWeight: 600, fontSize: 15 }}>🟣 Back</div>
@@ -346,6 +347,7 @@ export default function Home() {
   const [authModalOpen, setAuthModalOpen] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const { user, isLoading, setUser } = useAuth();
+  const isWideScreen = useIsWideScreen();
 
   // Add click outside handler
   const handleClickOutside = (e: React.MouseEvent) => {
@@ -597,72 +599,96 @@ export default function Home() {
                     <>
                       {hoveredSegment === 0 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
-                          <LegsBanner squats={squatsData} legsPhisique={legsPhisiqueData} onEdit={() => {
-                            setEditValues({
-                              'Bench Press': benchData?.weight ?? '',
-                              'Squats': squatsData?.weight ?? '',
-                              'Biceps Curls': curlsData?.weight ?? '',
-                              'Wide Grip Pull': pullData?.weight ?? '',
-                              'Frequency': frequencyData?.days_per_week ?? ''
-                            });
-                            setEditModalOpen(true);
-                          }} />
+                          <LegsBanner
+                            squats={squatsData}
+                            legsPhisique={legsPhisiqueData}
+                            onEdit={() => {
+                              setEditValues({
+                                'Bench Press': benchData?.weight ?? '',
+                                'Squats': squatsData?.weight ?? '',
+                                'Biceps Curls': curlsData?.weight ?? '',
+                                'Wide Grip Pull': pullData?.weight ?? '',
+                                'Frequency': frequencyData?.days_per_week ?? ''
+                              });
+                              setEditModalOpen(true);
+                            }}
+                            position={isWideScreen ? { left: 500, top: 320 } : { left: '50%', top: 320, transform: 'translateX(-50%)' }}
+                          />
                         </div>
                       )}
                       {hoveredSegment === 4 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
-                          <ArmsBanner curls={curlsData} armsPhisique={armsPhisiqueData} onEdit={() => {
-                            setEditValues({
-                              'Bench Press': benchData?.weight ?? '',
-                              'Squats': squatsData?.weight ?? '',
-                              'Biceps Curls': curlsData?.weight ?? '',
-                              'Wide Grip Pull': pullData?.weight ?? '',
-                              'Frequency': frequencyData?.days_per_week ?? ''
-                            });
-                            setEditModalOpen(true);
-                          }} />
+                          <ArmsBanner
+                            curls={curlsData}
+                            armsPhisique={armsPhisiqueData}
+                            onEdit={() => {
+                              setEditValues({
+                                'Bench Press': benchData?.weight ?? '',
+                                'Squats': squatsData?.weight ?? '',
+                                'Biceps Curls': curlsData?.weight ?? '',
+                                'Wide Grip Pull': pullData?.weight ?? '',
+                                'Frequency': frequencyData?.days_per_week ?? ''
+                              });
+                              setEditModalOpen(true);
+                            }}
+                            position={isWideScreen ? { left: 500, top: -60 } : { left: '50%', top: -60, transform: 'translateX(-50%)' }}
+                          />
                         </div>
                       )}
                       {hoveredSegment === 2 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
-                          <FrequencyBanner frequency={frequencyData} onEdit={() => {
-                            setEditValues({
-                              'Bench Press': benchData?.weight ?? '',
-                              'Squats': squatsData?.weight ?? '',
-                              'Biceps Curls': curlsData?.weight ?? '',
-                              'Wide Grip Pull': pullData?.weight ?? '',
-                              'Frequency': frequencyData?.days_per_week ?? ''
-                            });
-                            setEditModalOpen(true);
-                          }} />
+                          <FrequencyBanner
+                            frequency={frequencyData}
+                            onEdit={() => {
+                              setEditValues({
+                                'Bench Press': benchData?.weight ?? '',
+                                'Squats': squatsData?.weight ?? '',
+                                'Biceps Curls': curlsData?.weight ?? '',
+                                'Wide Grip Pull': pullData?.weight ?? '',
+                                'Frequency': frequencyData?.days_per_week ?? ''
+                              });
+                              setEditModalOpen(true);
+                            }}
+                            position={isWideScreen ? { left: -150, top: 140 } : { left: '50%', top: 140, transform: 'translateX(-50%)' }}
+                          />
                         </div>
                       )}
                       {hoveredSegment === 3 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
-                          <BackBanner pull={pullData} backPhisique={backPhisiqueData} onEdit={() => {
-                            setEditValues({
-                              'Bench Press': benchData?.weight ?? '',
-                              'Squats': squatsData?.weight ?? '',
-                              'Biceps Curls': curlsData?.weight ?? '',
-                              'Wide Grip Pull': pullData?.weight ?? '',
-                              'Frequency': frequencyData?.days_per_week ?? ''
-                            });
-                            setEditModalOpen(true);
-                          }} />
+                          <BackBanner
+                            pull={pullData}
+                            backPhisique={backPhisiqueData}
+                            onEdit={() => {
+                              setEditValues({
+                                'Bench Press': benchData?.weight ?? '',
+                                'Squats': squatsData?.weight ?? '',
+                                'Biceps Curls': curlsData?.weight ?? '',
+                                'Wide Grip Pull': pullData?.weight ?? '',
+                                'Frequency': frequencyData?.days_per_week ?? ''
+                              });
+                              setEditModalOpen(true);
+                            }}
+                            position={isWideScreen ? { left: -100, top: -100 } : { left: '50%', top: -100, transform: 'translateX(-50%)' }}
+                          />
                         </div>
                       )}
                       {hoveredSegment === 1 && (
                         <div onMouseEnter={handleBannerMouseEnter} onMouseLeave={handleBannerMouseLeave}>
-                          <ChestBanner bench={benchData} chestPhisique={chestPhisiqueData} onEdit={() => {
-                            setEditValues({
-                              'Bench Press': benchData?.weight ?? '',
-                              'Squats': squatsData?.weight ?? '',
-                              'Biceps Curls': curlsData?.weight ?? '',
-                              'Wide Grip Pull': pullData?.weight ?? '',
-                              'Frequency': frequencyData?.days_per_week ?? ''
-                            });
-                            setEditModalOpen(true);
-                          }} />
+                          <ChestBanner
+                            bench={benchData}
+                            chestPhisique={chestPhisiqueData}
+                            onEdit={() => {
+                              setEditValues({
+                                'Bench Press': benchData?.weight ?? '',
+                                'Squats': squatsData?.weight ?? '',
+                                'Biceps Curls': curlsData?.weight ?? '',
+                                'Wide Grip Pull': pullData?.weight ?? '',
+                                'Frequency': frequencyData?.days_per_week ?? ''
+                              });
+                              setEditModalOpen(true);
+                            }}
+                            position={isWideScreen ? { left: -60, top: 360 } : { left: '50%', top: 360, transform: 'translateX(-50%)' }}
+                          />
                         </div>
                       )}
                     </>
